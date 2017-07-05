@@ -1,0 +1,12 @@
+*.py[cod]
+*.db
+celerybeat-schedule
+celerybeat.pid
+private_settings.py
+*.log
+
+#packages
+logs/
+files/
+env/
+.idea/
