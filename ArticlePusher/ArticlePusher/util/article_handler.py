@@ -50,10 +50,10 @@ def article_update(response, selectors, use_bloom=settings.USE_BLOOM):
         else:           # 如果没有传入selectors则直接用整个html做hash
             content_hash = hashlib.md5(response.body).hexdigest()
 
-        if bf.isContains(content_hash, settings.REDIS_DB):  # 判断content_hash是否存在
+        if bf.isContains(content_hash, 0):  # 判断content_hash是否存在
             return False
         else:           # 如果不存在则添加并保存
-            bf.insert(content_hash, settings.REDIS_DB)
+            bf.insert(content_hash, 0)
             return True
 
     else:

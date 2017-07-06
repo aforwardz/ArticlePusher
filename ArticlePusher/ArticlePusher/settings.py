@@ -91,7 +91,6 @@ ROBOTSTXT_OBEY = False
 
 
 REDIS_HOST = '127.0.0.1'
-REDIS_DB = 'article_'
 
 # 使用bloom过滤器
 USE_BLOOM = True
