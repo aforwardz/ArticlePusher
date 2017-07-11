@@ -1,5 +1,6 @@
 *.py[cod]
 *.db
+*.pkl
 celerybeat-schedule
 celerybeat.pid
 private_settings.py

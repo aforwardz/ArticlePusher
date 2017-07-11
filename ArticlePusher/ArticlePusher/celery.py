@@ -30,7 +30,7 @@ class CeleryConfig(object):
             'schedule': timedelta(seconds=2 * 60),
         },
         'push_updates': {
-            'task': 'tasks.push_updates',
+            'task': 'tasks.push_new_articles',
             'schedule': crontab(
                 minute='*/30',
                 hour='8-0',
