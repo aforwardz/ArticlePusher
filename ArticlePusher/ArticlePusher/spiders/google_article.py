@@ -5,7 +5,7 @@ from ArticlePusher.util.utils import PusherGenerator
 
 
 class GoogleSpider(scrapy.Spider):
-    name = 'google'
+    name = 'google_tech'
     allowed_host = 'googleblog.com'
     start_urls = [
         'https://opensource.googleblog.com/'  # googleblog
