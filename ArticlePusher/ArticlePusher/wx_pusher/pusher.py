@@ -37,15 +37,23 @@ class Pusher(wxpy.Bot):
     def send_articles(self, pusher):
         update_articles_list = self.get_updated_articles()
 
+    @wxpy.Bot.register(msg_types=wxpy.FRIENDS)
+    def auto_accept_friends(self, msg):
+        if '天才' in msg.text.lower():
+            new_friend = pusher.accept_friend(msg.card)
+            new_friend.send_msg('骚年，gay正面吗？滑稽')
+
 
 if __name__ == '__main__':
     pusher = Pusher()
-    template = '(๑•̀ᄇ•́)و ✧ \n{company} 更新新文章：\n' \
+    template = '(๑•̀ᄇ•́)و ✧ \n{company} 今日更新：\n' \
                '{title} \n 有兴趣不？点此链接 \n {link}\n\n\n'
     update_articles = pusher.get_updated_articles()
     receiver = pusher.search('Aforwardz', sex=wxpy.MALE)[0]
     if not receiver:
         push_logger.error('(╯‵□′)╯︵┻━┻ | Not find the gay!')
+    logger = wxpy.get_wechat_logger(receiver)
+    logger.info()
     if update_articles:
         for company, articles in update_articles:
             message = ''
@@ -58,5 +66,6 @@ if __name__ == '__main__':
                     company=company, title=title, link=link
                 )
 
-            media_id = receiver.send_msg(message)
-            push_logger.info('send media id is: %s' % media_id)
+            receiver.send_msg(message)
+    else:
+        receiver.send_msg('o(╯□╰)o | 今天木有新东西')

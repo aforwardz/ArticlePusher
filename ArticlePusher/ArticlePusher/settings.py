@@ -9,6 +9,9 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BOT_NAME = 'ArticlePusher'
 
 SPIDER_MODULES = ['ArticlePusher.spiders']
@@ -89,7 +92,7 @@ ROBOTSTXT_OBEY = False
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-
+LOG = os.path.join(BASE_DIR, 'logs/')
 REDIS_HOST = '127.0.0.1'
 
 # 使用bloom过滤器
