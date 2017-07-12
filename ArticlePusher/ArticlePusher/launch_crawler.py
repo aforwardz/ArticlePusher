@@ -37,5 +37,5 @@ def launch_tech_crawler():
         d.addBoth(lambda _: reactor.stop())
         reactor.run()
     except Exception as e:
-        launch_logger.error('(╯‵□′)╯︵┻━┻ | There is an exception:\n{excep}'
+        launch_logger.error('(╯‵□′)╯︵┻━┻ | 爬虫有毛病:\n{excep}'
                             .format(excep=e))
