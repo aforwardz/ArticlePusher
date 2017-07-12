@@ -21,7 +21,7 @@ class SimpleHash:
         ret = 0
         for i in range(value.__len__()):
             ret += self.seed * ret + ord(value[i])
-        return ((self.cap - 1) & ret)
+        return (self.cap - 1) & ret
 
 
 class BloomFilter:
@@ -34,7 +34,7 @@ class BloomFilter:
     def __init__(self):
         self.bit_size = 1 << 25
         self.seeds = [5, 7, 11, 13, 31, 37, 61]
-        self.r = redis.StrictRedis(host=settings.REDIS_HOST, port=6379, db=0)
+        self.r = redis.StrictRedis(host=settings.REDIS_HOST, port=6379, db=settings.UTILDB)
         self.hashFunc = []
         for i in range(self.seeds.__len__()):
             self.hashFunc.append(SimpleHash(self.bit_size, self.seeds[i]))
@@ -61,7 +61,7 @@ BloomInstance = BloomFilter()
 
 class PusherGenerator(object):
     def __init__(self):
-        self.client = redis.Redis(settings.REDIS_HOST, db=1)
+        self.client = redis.Redis(settings.REDIS_HOST, db=settings.STAFFDB)
 
     def generate_updated_key(self, name):
         return ''.join(['article_', str(date.today()), '_', name])
@@ -78,7 +78,7 @@ class PusherGenerator(object):
         new_key = self.generate_updated_key(name)
         old_key = self.generate_old_key(name)
         if self.client.exists(old_key):
-            old_dict = self.client.get(old_key)
+            old_dict = eval(self.client.get(old_key).decode('utf-8'))
             for key in old_dict.keys():
                 try:
                     new_dict.pop(key)
@@ -90,3 +90,13 @@ class PusherGenerator(object):
             self.client.set(new_key, new_dict, ex=timedelta(days=10))
         else:
             self.client.set(new_key, new_dict, ex=timedelta(days=10))
+
+
+def set_update_flag():
+    client = redis.Redis(settings.REDIS_HOST, db=settings.UTILDB)
+    client.set('update_flag', settings.YES, xx=True)
+
+
+def retreat_update_flag():
+    client = redis.Redis(settings.REDIS_HOST, db=settings.UTILDB)
+    client.set('update_flag', settings.NO, xx=True)

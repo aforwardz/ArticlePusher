@@ -93,7 +93,15 @@ ROBOTSTXT_OBEY = False
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 LOG = os.path.join(BASE_DIR, 'logs/')
+
+# redis setting
 REDIS_HOST = '127.0.0.1'
+STAFFDB = 1
+UTILDB = 0
+
+# flag status
+YES = 1
+NO = 0
 
 # 使用bloom过滤器
 USE_BLOOM = True

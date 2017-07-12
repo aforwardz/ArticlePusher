@@ -15,17 +15,18 @@ class Pusher(wxpy.Bot):
         self.template = '(๑•̀ᄇ•́)و ✧ \n{company} 今日更新：\n' \
                    '{title} \n 有兴趣不？点此链接 \n {link}\n\n\n'
         self.signature = '\n\n  --该消息来自Aforwardz-Robot'
-        self.client = redis.Redis(settings.REDIS_HOST, db=1)
+        self.staff_client = redis.Redis(settings.REDIS_HOST, db=settings.STAFFDB)
+        self.util_client = redis.Redis(settings.REDIS_HOST, db=settings.UTILDB)
         self.updated_keys = ''.join(['article_', str(date.today()),'*'])
         super(Pusher, self).__init__(*args, **kwargs)
 
     # read from redis
     def _has_updated(self):
-        if not self.client.keys('article_*'):
+        if not self.staff_client.keys('article_*'):
             push_logger.error('(╯‵□′)╯︵┻━┻ | 根本没有文章这种东西!')
             return False
         else:
-            if not self.client.keys(self.updated_keys):
+            if not self.staff_client.keys(self.updated_keys):
                 push_logger.info('o(╯□╰)o | 今日木有更新!')
                 return False
             else:
@@ -34,8 +35,8 @@ class Pusher(wxpy.Bot):
 
     def _get_updated_articles(self):
         if self._has_updated():
-            keys = self.client.keys(self.updated_keys)
-            return zip(keys, self.client.mget(keys))
+            keys = self.staff_client.keys(self.updated_keys)
+            return zip(keys, self.staff_client.mget(keys))
         else:
             return []
 
@@ -67,20 +68,20 @@ class Pusher(wxpy.Bot):
     #             push_logger.info('')
 
     def _get_group_members(self, group_name):
-        if not self.client.exists(group_name):
+        if not self.util_client.exists(group_name):
             push_logger.error(
                 '(╯‵□′)╯︵┻━┻ | 根本没有＊{gname}＊这个组!'.format(
                     gname=group_name
                 ))
             return
-        elif not self.client.get(group_name):
+        elif not self.util_client.get(group_name):
             push_logger.info(
                 '╮(￣▽￣)╭ | 根本没人对＊{gname}＊这个组感兴趣!'.format(
                     gname=group_name
                 ))
             return
         else:
-            return eval(self.client.get(group_name).decode('utf-8'))
+            return eval(self.util_client.get(group_name).decode('utf-8'))
 
     def _send_staff_to_members(self, members, staff):
         for geek in members:
@@ -125,6 +126,23 @@ class Pusher(wxpy.Bot):
             update_articles = self._get_updated_articles()
             self._send_staff_to_members(group_members, update_articles)
 
+    # def push_new_staff_to_group_chat(self, group_chat_name, test=False):
+    #     group_chat = self.groups().search(keywords=group_chat_name)
+    #     if not group_chat:
+    #         return
+    #     update_articles = self._get_updated_articles()
+    #     group_chat.
+    #     self._send_staff_to_members(group_members, update_articles)
+
+    def listen_update_flag(self, group_name):
+        while True:
+            if int(self.util_client.get('update_flag').decode('utf-8')):
+                self.push_new_staff(group_name)
+                self.util_client.set('update_flag', settings.NO, xx=True)
+                time.sleep(60*60)
+            else:
+                time.sleep(60*60)
+
 
 if __name__ == '__main__':
     pusher = Pusher(cache_path=True)
@@ -150,12 +168,11 @@ if __name__ == '__main__':
                     '你将被加入{gname}这个组！<(￣︶￣)>'.format(gname=push_group))
             else:
                 push_logger.info('介个人只是撩你玩儿╮(╯▽╰)╭')
-                msg.sender.send_msg(
-                    '干嘛！有病吃药！(→_→)')
+                msg.sender.send_msg('干嘛！有病吃药！(→_→)')
                 return
 
-            if pusher.client.exists(push_group):
-                push_group_member = pusher.client.get(push_group)
+            if pusher.util_client.exists(push_group):
+                push_group_member = pusher.util_client.get(push_group)
                 push_group_member = eval(push_group_member.decode('utf-8'))
                 if any([msg.sender.nick_name==x['name'] for x in push_group_member]):
                     msg.sender.send_msg(
@@ -165,7 +182,7 @@ if __name__ == '__main__':
                     'name': msg.sender.nick_name,
                     'sex': msg.sender.sex
                 })
-                pusher.client.set(push_group, push_group_member, xx=True)
+                pusher.util_client.set(push_group, push_group_member, xx=True)
                 msg.sender.send_msg(
                     '你已被加入{gname}这个组！<(￣︶￣)>'.format(gname=push_group))
             else:
@@ -173,13 +190,13 @@ if __name__ == '__main__':
                     'name': msg.sender.nick_name,
                     'sex': msg.sender.sex
                 }]
-                pusher.client.set(push_group, push_group_member)
+                pusher.util_client.set(push_group, push_group_member)
                 push_logger.info('')
 
 
     listen_push_thread = threading.Thread(
-        target=pusher.push_new_staff,
-        args=['tech_group', True],
+        target=pusher.listen_update_flag,
+        args=['tech_group'],
 
     )
     listen_push_thread.setDaemon(True)
