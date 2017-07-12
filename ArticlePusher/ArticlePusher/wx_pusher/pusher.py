@@ -87,7 +87,7 @@ class Pusher(wxpy.Bot):
         for geek in members:
             try:
                 receiver = wxpy.ensure_one(
-                    self.search(geek['name'], sex=geek['sex']))
+                    self.friends().search(geek['name'], sex=geek['sex']))
             except ValueError as e:
                 push_logger.error(
                     '(╯‵□′)╯︵┻━┻ | {exception}!'.format(exception=e))
@@ -126,22 +126,41 @@ class Pusher(wxpy.Bot):
             update_articles = self._get_updated_articles()
             self._send_staff_to_members(group_members, update_articles)
 
-    # def push_new_staff_to_group_chat(self, group_chat_name, test=False):
-    #     group_chat = self.groups().search(keywords=group_chat_name)
-    #     if not group_chat:
-    #         return
-    #     update_articles = self._get_updated_articles()
-    #     group_chat.
-    #     self._send_staff_to_members(group_members, update_articles)
+    def push_new_staff_to_group_chat(self, group_chat_name):
+        try:
+            group_chat = wxpy.ensure_one(
+                self.groups().search(keywords=group_chat_name))
+        except ValueError as e:
+            push_logger.error(
+                '(╯‵□′)╯︵┻━┻ | {exception}!'.format(exception=e))
+            return
 
-    def listen_update_flag(self, group_name):
+        update_articles = self._get_updated_articles()
+        if update_articles:
+            for company, articles in update_articles:
+                message = ''
+                company = company.decode('utf-8')
+                articles = eval(articles.decode('utf-8'))
+                push_logger.info('大牛公司: {company}\n'
+                                 '更新了: {article}\n')
+                for title, link in articles.items():
+                    message += self.template.format(
+                        company=company, title=title, link=link
+                    )
+
+                group_chat.send_msg(message + self.signature)
+        else:
+            group_chat.send_msg('╮(￣▽￣)╭ | 今天木有新东西' + self.signature)
+
+    def listen_update_flag(self, group_name, group_chat_name):
         while True:
             if int(self.util_client.get('update_flag').decode('utf-8')):
                 self.push_new_staff(group_name)
+                self.push_new_staff_to_group_chat(group_chat_name)
                 self.util_client.set('update_flag', settings.NO, xx=True)
                 time.sleep(60*60)
             else:
-                time.sleep(60*60)
+                time.sleep(30*60)
 
 
 if __name__ == '__main__':
@@ -196,9 +215,9 @@ if __name__ == '__main__':
 
     listen_push_thread = threading.Thread(
         target=pusher.listen_update_flag,
-        args=['tech_group'],
+        args=['tech_group', 'Aforwardz'],
 
     )
     listen_push_thread.setDaemon(True)
     listen_push_thread.start()
-    pusher.join()
+    wxpy.embed()
