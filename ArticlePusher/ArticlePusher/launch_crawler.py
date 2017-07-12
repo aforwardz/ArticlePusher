@@ -36,6 +36,8 @@ def launch_tech_crawler():
         d = launcher.join()
         d.addBoth(lambda _: reactor.stop())
         reactor.run()
+        return True
     except Exception as e:
         launch_logger.error('(╯‵□′)╯︵┻━┻ | 爬虫有毛病:\n{excep}'
                             .format(excep=e))
+        return False
