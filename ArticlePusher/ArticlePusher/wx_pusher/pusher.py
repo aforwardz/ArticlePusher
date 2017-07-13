@@ -216,8 +216,7 @@ if __name__ == '__main__':
     listen_push_thread = threading.Thread(
         target=pusher.listen_update_flag,
         args=['tech_group', 'Aforwardz'],
-
     )
     listen_push_thread.setDaemon(True)
     listen_push_thread.start()
-    wxpy.embed()
+    pusher.join()
