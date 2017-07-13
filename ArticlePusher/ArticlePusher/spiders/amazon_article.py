@@ -23,6 +23,7 @@ class AmazonSpider(scrapy.Spider):
         if article_handler.article_update(response, self.compare_xpath):
             article_titles = response.xpath('//article[@class="post"]//h2/a/span/text()').extract()
             article_links = response.xpath('//article[@class="post"]//h2/a/@href').extract()
+            assert len(article_titles) == len(article_links), '文章标题数与连接数不匹配'
             article_dicts = dict((x, y) for x, y in zip(article_titles, article_links))
             amazon = PusherGenerator()
             amazon.save_today_new_articles(self.name, article_dicts)
