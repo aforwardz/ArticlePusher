@@ -30,6 +30,8 @@ def launch_tech_crawler():
     launcher = CrawlerRunner(settings)
     crawlers = launcher.spider_loader.list()
     crawlers = list([c for c in crawlers if c.__contains__('tech')])
+    for c in settings.get('ARTICLE_EXCLUDE', []):
+        crawlers.remove(c)
     try:
         for crawler in crawlers:
             launcher.crawl(crawler)
