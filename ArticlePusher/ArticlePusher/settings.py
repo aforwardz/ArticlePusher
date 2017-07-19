@@ -105,3 +105,11 @@ NO = 0
 
 # 使用bloom过滤器
 USE_BLOOM = True
+
+# 过滤一些爬虫
+ARTICLE_EXCLUDE = [
+    'amazon_tech',
+    'google_tech',
+    'twitter_tech',
+    'dabapps_tech'
+]
