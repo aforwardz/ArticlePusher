@@ -23,7 +23,7 @@ class CeleryConfig(object):
     CELERYBEAT_SCHEDULE = {
         'crawl_tech_sites': {
             'task': 'ArticlePusher.tasks.crawl_tech_sites',
-            'schedule': crontab(minute=50, hour=6),
+            'schedule': crontab(minute='50', hour='06'),
         },
         # 'push_updates': {
         #     'task': 'tasks.push_new_articles',
