@@ -154,7 +154,8 @@ class Pusher(wxpy.Bot):
 
     def listen_update_flag(self, group_name, group_chat_name):
         while True:
-            if int(self.util_client.get('update_flag').decode('utf-8')):
+            update_flag = self.util_client.get('update_flag')
+            if update_flag and update_flag.decode('utf-8'):
                 self.push_new_staff(group_name)
                 self.push_new_staff_to_group_chat(group_chat_name)
                 self.util_client.set('update_flag', settings.NO, xx=True)
