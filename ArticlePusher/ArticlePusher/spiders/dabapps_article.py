@@ -28,4 +28,4 @@ class DabappsSpider(scrapy.Spider):
             article_links = list([response.urljoin(url) for url in article_links])
             article_dicts = dict((x, y) for x, y in zip(article_titles, article_links))
             amazon = PusherGenerator()
-            amazon.save_today_new_articles(self.name, article_dicts)
+            amazon.save_today_new_articles('article', self.name, article_dicts)

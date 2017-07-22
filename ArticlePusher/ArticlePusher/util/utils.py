@@ -63,20 +63,20 @@ class PusherGenerator(object):
     def __init__(self):
         self.client = redis.Redis(settings.REDIS_HOST, db=settings.STAFFDB)
 
-    def generate_updated_key(self, name):
-        return ''.join(['article_', str(date.today()), '_', name])
+    def generate_updated_key(self, func, name):
+        return ''.join([func, '_', str(date.today()), '_', name])
 
-    def generate_old_key(self, name):
-        return ''.join(['article_', str(date.today() - timedelta(days=1)), '_', name])
+    def generate_old_key(self, func, name):
+        return ''.join([func, '_', str(date.today() - timedelta(days=1)), '_', name])
 
-    def save_today_new_articles(self, name, new_dict):
+    def save_today_new_articles(self, func, name, new_dict):
         """
         :param name: site name
         :param new_dict: article dict of today
         :return: article dict eliminated articles of yesterday
         """
-        new_key = self.generate_updated_key(name)
-        old_key = self.generate_old_key(name)
+        new_key = self.generate_updated_key(func, name)
+        old_key = self.generate_old_key(func, name)
         if self.client.exists(old_key):
             old_dict = eval(self.client.get(old_key).decode('utf-8'))
             for key in old_dict.keys():
@@ -92,11 +92,11 @@ class PusherGenerator(object):
             self.client.set(new_key, new_dict, ex=timedelta(days=10))
 
 
-def set_update_flag():
+def set_update_flag(flag_name):
     client = redis.Redis(settings.REDIS_HOST, db=settings.UTILDB)
-    client.set('update_flag', settings.YES, xx=True)
+    client.set(flag_name, settings.YES, xx=True)
 
 
-def retreat_update_flag():
+def retreat_update_flag(flag_name):
     client = redis.Redis(settings.REDIS_HOST, db=settings.UTILDB)
-    client.set('update_flag', settings.NO, xx=True)
+    client.set(flag_name, settings.NO, xx=True)
