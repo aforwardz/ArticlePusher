@@ -5,6 +5,7 @@ import scrapy
 class GithubSpider(scrapy.Spider):
     name = 'github'
     allowed_host = 'githubengineering.com'
+    proxy = True
     start_urls = [
         'https://githubengineering.com/'  # githubengineering
     ]

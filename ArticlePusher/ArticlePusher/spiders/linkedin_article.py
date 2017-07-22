@@ -5,6 +5,7 @@ import scrapy
 class LinkdinSpider(scrapy.Spider):
     name = 'linkedin'
     allowed_host = 'linkedin.com'
+    proxy = True
     start_urls = [
         'https://engineering.linkedin.com/'  # linkedin
     ]

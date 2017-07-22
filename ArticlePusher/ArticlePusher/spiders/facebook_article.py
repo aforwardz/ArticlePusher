@@ -5,6 +5,7 @@ import scrapy
 class FacebookSpider(scrapy.Spider):
     name = 'facebook'
     allowed_host = 'facebook.com'
+    proxy = True
     start_urls = [
         'https://code.facebook.com/'  # facebook
     ]

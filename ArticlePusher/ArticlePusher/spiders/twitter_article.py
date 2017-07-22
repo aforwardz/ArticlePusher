@@ -7,6 +7,7 @@ from ArticlePusher.util.utils import PusherGenerator
 class TwitterSpider(scrapy.Spider):
     name = 'twitter_tech'
     allowed_host = 'twitter.com'
+    proxy = True
     start_urls = [
         'https://blog.twitter.com/engineering/en_us.html'  # twitter
     ]

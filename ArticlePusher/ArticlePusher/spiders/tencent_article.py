@@ -7,6 +7,7 @@ from ArticlePusher.util.utils import PusherGenerator
 class DabappsSpider(scrapy.Spider):
     name = 'tencent_tech'
     allowed_host = 'tencentdba.com'
+    proxy = False
     start_urls = [
         'http://tencentdba.com/'  # tencent
     ]

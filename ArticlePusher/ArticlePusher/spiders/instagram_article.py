@@ -7,6 +7,7 @@ from ArticlePusher.util.utils import PusherGenerator
 class InstagramSpider(scrapy.Spider):
     name = 'instagram'
     allowed_host = 'instagram.com'
+    proxy = True
     start_urls = [
         'https://engineering.instagram.com/'  # instagram
     ]

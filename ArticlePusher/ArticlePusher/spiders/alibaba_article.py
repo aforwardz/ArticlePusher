@@ -7,6 +7,7 @@ from ArticlePusher.util.utils import PusherGenerator
 class AlibabaSpider(scrapy.Spider):
     name = 'alibaba_tech'
     allowed_host = 'taobao.org'
+    proxy = False
     start_urls = [
         'http://jm.taobao.org/'  # alibaba middleware
     ]
