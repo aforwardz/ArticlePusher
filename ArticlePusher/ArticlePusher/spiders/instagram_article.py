@@ -26,4 +26,4 @@ class InstagramSpider(scrapy.Spider):
             article_links = response.xpath('//div[@class="post-outer"]//h3/a/@href').extract()
             article_dicts = dict((x, y) for x, y in zip(article_titles, article_links))
             instagram = PusherGenerator()
-            instagram.save_today_new_articles(self.name, article_dicts)
+            instagram.save_today_new_articles('article', self.name, article_dicts)

@@ -24,14 +24,16 @@ def get_settings():
     return settings
 
 
-def launch_tech_crawler():
+def launch_crawlers(crawler_class, exclusion=None):
     settings = get_settings()
     configure_logging(settings=settings)
     launcher = CrawlerRunner(settings)
     crawlers = launcher.spider_loader.list()
-    crawlers = list([c for c in crawlers if c.__contains__('tech')])
-    for c in settings.get('ARTICLE_EXCLUDE', []):
-        crawlers.remove(c)
+    crawlers = list([c for c in crawlers if c.__contains__(crawler_class)])
+    if exclusion:
+        for c in settings.get(exclusion, []):
+            crawlers.remove(c)
+
     try:
         for crawler in crawlers:
             launcher.crawl(crawler)

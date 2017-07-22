@@ -27,4 +27,4 @@ class TwitterSpider(scrapy.Spider):
             assert len(article_titles) == len(article_links), '文章标题数与连接数不匹配'
             article_dicts = dict((x, y) for x, y in zip(article_titles, article_links))
             twitter = PusherGenerator()
-            twitter.save_today_new_articles(self.name, article_dicts)
+            twitter.save_today_new_articles('article', self.name, article_dicts)

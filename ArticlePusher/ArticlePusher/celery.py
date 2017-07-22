@@ -25,6 +25,10 @@ class CeleryConfig(object):
             'task': 'ArticlePusher.tasks.crawl_tech_sites',
             'schedule': crontab(minute='50', hour='06'),
         },
+        'crawl_opera_sites': {
+            'task': 'ArticlePusher.tasks.crawl_opera_sites',
+            'schedule': crontab(minute='30', hour='06'),
+        },
         # 'push_updates': {
         #     'task': 'tasks.push_new_articles',
         #     'schedule': crontab(
