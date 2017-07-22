@@ -19,7 +19,7 @@ class HttpProxyMiddleware(object):
     # overwrite process request
     def process_request(self, request, spider):
         # Set the location of the proxy
-        if spider.proxy:
+        if hasattr(spider, 'proxy') and spider.proxy:
             # PROXY: 'http://PROXY_IP:PORT'
             request.meta['proxy'] = PROXY
 

@@ -42,8 +42,6 @@ class VmusSpider(scrapy.Spider):
             )
 
     def parse(self, response):
-        print(response.status)
-        return
         if article_handler.article_update(response, self.compare_xpath):
             opera_titles = response.xpath('//article[@class="post"]//h2/a/span/text()').extract()
             opera_links = response.xpath('//article[@class="post"]//h2/a/@href').extract()
