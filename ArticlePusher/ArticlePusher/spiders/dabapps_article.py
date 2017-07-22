@@ -7,6 +7,7 @@ from ArticlePusher.util.utils import PusherGenerator
 class DabappsSpider(scrapy.Spider):
     name = 'dabapps_tech'
     allowed_host = 'dabapps.com'
+    proxy = True
     start_urls = [
         'https://www.dabapps.com/blog/'  # dabapps
     ]

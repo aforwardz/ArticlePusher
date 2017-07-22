@@ -7,6 +7,7 @@ from ArticlePusher.util.utils import PusherGenerator
 class VmusSpider(scrapy.Spider):
     name = 'vmus_opera'
     allowed_host = 'vmus.co'
+    proxy = True
     start_urls = [
         'https://vmus.co/'  # vmus
     ]

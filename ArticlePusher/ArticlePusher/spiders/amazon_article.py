@@ -7,6 +7,7 @@ from ArticlePusher.util.utils import PusherGenerator
 class AmazonSpider(scrapy.Spider):
     name = 'amazon_tech'
     allowed_host = 'amazon.com'
+    proxy = True
     start_urls = [
         'https://aws.amazon.com/cn/blogs/aws/'  # amazon
     ]
