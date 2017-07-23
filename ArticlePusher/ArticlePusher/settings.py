@@ -96,7 +96,7 @@ LOG = os.path.join(BASE_DIR, 'logs/')
 
 # redis setting
 REDIS_HOST = '127.0.0.1'
-STAFFDB = 1
+STUFFDB = 1
 UTILDB = 0
 
 # flag status

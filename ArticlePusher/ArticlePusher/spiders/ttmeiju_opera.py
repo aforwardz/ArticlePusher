@@ -28,4 +28,4 @@ class TtmeijuSpider(scrapy.Spider):
             opera_links = list([response.urljoin(url) for url in opera_links])
             opera_dicts = dict((x, y) for x, y in zip(opera_titles, opera_links))
             ttmeiju = PusherGenerator()
-            ttmeiju.save_today_new_articles('opera', self.name, opera_dicts)
+            ttmeiju.save_today_new_articles('america', self.name, opera_dicts)
