@@ -214,7 +214,7 @@ class Pusher(wxpy.Bot):
 
 
 if __name__ == '__main__':
-    pusher = Pusher(cache_path=False)
+    pusher = Pusher(cache_path=True)
     pusher.enable_puid(path='wxpy.pkl')
 
 
