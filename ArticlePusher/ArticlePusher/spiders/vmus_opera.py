@@ -48,4 +48,4 @@ class VmusSpider(scrapy.Spider):
             assert len(opera_titles) == len(opera_links), '文章标题数与连接数不匹配'
             opera_dicts = dict((x, y) for x, y in zip(opera_titles, opera_links))
             vmus = PusherGenerator()
-            vmus.save_today_new_articles('opera', self.name, opera_dicts)
+            vmus.save_today_new_articles('british', self.name, opera_dicts)

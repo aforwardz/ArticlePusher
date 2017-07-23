@@ -28,4 +28,4 @@ class BbcSpider(scrapy.Spider):
             opera_links = list([response.urljoin(url) for url in opera_links])
             opera_dicts = dict((x, y) for x, y in zip(opera_titles, opera_links))
             bbc = PusherGenerator()
-            bbc.save_today_new_articles(self.name, opera_dicts)
+            bbc.save_today_new_articles('british', self.name, opera_dicts)

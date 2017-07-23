@@ -61,22 +61,22 @@ BloomInstance = BloomFilter()
 
 class PusherGenerator(object):
     def __init__(self):
-        self.client = redis.Redis(settings.REDIS_HOST, db=settings.STAFFDB)
+        self.client = redis.Redis(settings.REDIS_HOST, db=settings.STUFFDB)
 
-    def generate_updated_key(self, func, name):
-        return ''.join([func, '_', str(date.today()), '_', name])
+    def generate_updated_key(self, sub_class, name):
+        return ''.join([sub_class, '_', str(date.today()), '_', name])
 
-    def generate_old_key(self, func, name):
-        return ''.join([func, '_', str(date.today() - timedelta(days=1)), '_', name])
+    def generate_old_key(self, sub_class, name):
+        return ''.join([sub_class, '_', str(date.today() - timedelta(days=1)), '_', name])
 
-    def save_today_new_articles(self, func, name, new_dict):
+    def save_today_new_articles(self, sub_class, name, new_dict):
         """
         :param name: site name
         :param new_dict: article dict of today
         :return: article dict eliminated articles of yesterday
         """
-        new_key = self.generate_updated_key(func, name)
-        old_key = self.generate_old_key(func, name)
+        new_key = self.generate_updated_key(sub_class, name)
+        old_key = self.generate_old_key(sub_class, name)
         if self.client.exists(old_key):
             old_dict = eval(self.client.get(old_key).decode('utf-8'))
             for key in old_dict.keys():
