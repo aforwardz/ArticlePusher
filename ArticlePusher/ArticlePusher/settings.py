@@ -55,9 +55,14 @@ DOWNLOAD_DELAY = 2
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-   'ArticlePusher.middlewares.HttpProxyMiddleware': 543,
-}
+try:
+    from ArticlePusher import private_settings
+    DOWNLOADER_MIDDLEWARES = {
+       'ArticlePusher.middlewares.HttpProxyMiddleware': 543,
+    }
+    MANAGER = True
+except ImportError:
+    MANAGER = False
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html

@@ -13,13 +13,21 @@ push_logger = logging.getLogger('push_logger')
 
 class Pusher(wxpy.Bot):
     def __init__(self, *args, **kwargs):
-        self.template = '(๑•̀ᄇ•́)و ✧ \n{company} 今日更新：\n' \
-                   '{title} \n 有兴趣不？点此链接 \n {link}\n\n\n'
+        self.template = '(๑•̀ᄇ•́)و ✧ \n{company} 今日更新：\n\n' \
+                   '{title} \n 有兴趣不？点此链接 \n {link}\n\n'
         self.signature = '\n\n  --该消息来自Aforwardz-Robot'
         self.stuff_client = redis.Redis(settings.REDIS_HOST, db=settings.STUFFDB)
         self.util_client = redis.Redis(settings.REDIS_HOST, db=settings.UTILDB)
         self.updated_keys = ''
+        self.manager = {}
+        self.set_pusher_manager()
         super(Pusher, self).__init__(*args, **kwargs)
+
+    def set_pusher_manager(self):
+        if settings.MANAGER:
+            from ArticlePusher.private_settings import MANAGER
+            self.manager = MANAGER
+            push_logger.info('设置管理员成功')
 
     def generate_updated_keys(self, subclass, func):
         self.updated_keys = ''.join([subclass, '_', str(date.today()), '*', func])
@@ -249,6 +257,16 @@ if __name__ == '__main__':
                     # msg.sender.send_msg('干嘛！有病吃药！(→_→)')
                     continue
 
+    # 还未有好的方案
+    # @pusher.register(msg_types=wxpy.TEXT)
+    # def manager_set_things(msg):
+    #     if not pusher.manager:
+    #         return
+    #     if not isinstance(msg.sender, wxpy.Friend):
+    #         return
+    #     if msg.sender.nick_name == pusher.manager['name'] and \
+    #         msg.sender.sex == pusher.manager['sex']:
+    #         pass
 
     listen_push_thread = threading.Thread(
         target=pusher.listen_update_flag,
