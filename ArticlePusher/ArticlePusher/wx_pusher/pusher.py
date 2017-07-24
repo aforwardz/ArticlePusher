@@ -213,17 +213,15 @@ class Pusher(wxpy.Bot):
             time.sleep(30*60)
 
 
-if __name__ == '__main__':
+def run_pusher():
     pusher = Pusher(cache_path=True)
     pusher.enable_puid(path='wxpy.pkl')
-
 
     @pusher.register(msg_types=wxpy.FRIENDS)
     def auto_accept_friends(msg):
         if '天才' in msg.text.lower():
             new_friend = pusher.accept_friend(msg.card)
             new_friend.send_msg('骚年，gay正面吗？滑稽')
-
 
     @pusher.register(msg_types=wxpy.TEXT)
     def add_friend_to_specific_group(msg):
