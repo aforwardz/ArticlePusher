@@ -1,3 +1,4 @@
+# * PROJECT DEPRECATED DUE TO WEB WECHAT BEING DOWN 
 # ArticlePusher
 ## environment
 - python3.x
